@@ -40,4 +40,6 @@ api 요청을 통해 진행
 2. topic partition 3 replica 2
    - 토픽을 어떻게 구성하는것이 맞나?
      - 방송을 여러개 할 수 있으니, 토픽은 방송별로 생성(like)
+   - consumer 3
+
 

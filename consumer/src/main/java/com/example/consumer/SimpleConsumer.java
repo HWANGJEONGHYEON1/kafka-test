@@ -1,10 +1,12 @@
-package com.example.consumers.kafka;
+package com.example.consumer;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.errors.WakeupException;
+import org.apache.kafka.common.serialization.LongDeserializer;
+import org.apache.kafka.common.serialization.LongSerializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,20 +18,18 @@ import java.util.Properties;
 public class SimpleConsumer {
 
     public static final Logger logger = LoggerFactory.getLogger(SimpleConsumer.class.getName());
-
+    private static final String LIKE_TOPIC = "like_events"; // 좋아요 이벤트를 보낼 토픽 이름
     public static void main(String[] args) {
 
-        String topicName = "simple-topic";
 
         Properties props = new Properties();
-        props.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
+        props.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9091, 127.0.0.1:9092, 127.0.0.1:9093");
         props.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-        props.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-        props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "simple-group");
+        props.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, LongDeserializer.class.getName());
+        props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "like-group");
 
-
-        KafkaConsumer<String, String> kafkaConsumer = new KafkaConsumer<>(props);
-        kafkaConsumer.subscribe(List.of(topicName));
+        KafkaConsumer<String, Long> kafkaConsumer = new KafkaConsumer<>(props);
+        kafkaConsumer.subscribe(List.of(LIKE_TOPIC));
 
         Thread mainThread = Thread.currentThread();
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -43,7 +43,7 @@ public class SimpleConsumer {
 
         try {
             while (true) {
-                ConsumerRecords<String, String> consumerRecords = kafkaConsumer.poll(Duration.ofMillis(1000));
+                ConsumerRecords<String, Long> consumerRecords = kafkaConsumer.poll(Duration.ofMillis(1000));
 
                 for (ConsumerRecord record : consumerRecords) {
                     logger.info("record key:{},  partition:{}, record offset:{} record value:{}",
@@ -56,8 +56,5 @@ public class SimpleConsumer {
             logger.info("finally consumer is closing");
             kafkaConsumer.close();
         }
-
-        //kafkaConsumer.close();
-
     }
 }
