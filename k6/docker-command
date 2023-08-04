@@ -4,7 +4,7 @@ kafka-monitoring 접속
 localhost:9000
 
 토픽 생성
-docker exec -it k6_kafka1_1 kafka-topics --bootstrap-server localhost:19091 --create --topic test-topic --partitions 3 --replication-factor 2
+docker exec -it k6_kafka1_1 kafka-topics --bootstrap-server localhost:19091 --create --topic like_events --partitions 3 --replication-factor 2
 
 토픽 상세
 kafka-topics.sh --bootstrap-server localhost:9092 --describe --topic m-brk-topic

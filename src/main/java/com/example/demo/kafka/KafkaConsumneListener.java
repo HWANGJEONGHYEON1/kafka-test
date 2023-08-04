@@ -1,2 +1,4 @@
-package com.example.demo.kafka;public class KafkaConsumneListener {
+package com.example.demo.kafka;
+
+public class KafkaConsumneListener {
 }
