@@ -1,12 +1,14 @@
 package com.example.producer.producer;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class LikeEventProducer {
 
     private final String LIKE_TOPIC = "like_events"; // 좋아요 이벤트를 보낼 토픽 이름
@@ -21,17 +23,17 @@ public class LikeEventProducer {
     public void sendLikeEvent(String broadcastId) {
         // 현재 좋아요 개수 조회 (레디스 등을 이용해서 좋아요 개수를 가져온다고 가정)
         Long currentLikeCount = getLikeCount(broadcastId);
-
+        log.info("### TEST ####");
         // 좋아요 개수가 제한을 초과하는 경우 프로듀싱하지 않음
         // 관리자가 조절한다는 가정을 가짐
-        if (currentLikeCount >= maxLikeCount) {
-            return;
-        }
+//        if (currentLikeCount >= maxLikeCount) {
+//            return;
+//        }
 
         incrementLikeCount(broadcastId);
-
+        log.info("### TEST");
         // 좋아요 이벤트를 Kafka 토픽에 전송
-        kafkaTemplate.send(LIKE_TOPIC, 1L);
+        kafkaTemplate.send(LIKE_TOPIC, Long.valueOf(broadcastId));
     }
 
     public Long incrementLikeCount(String broadcastId) {

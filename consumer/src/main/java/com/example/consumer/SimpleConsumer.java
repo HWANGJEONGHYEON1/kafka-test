@@ -43,11 +43,19 @@ public class SimpleConsumer {
 
         try {
             while (true) {
-                ConsumerRecords<String, Long> consumerRecords = kafkaConsumer.poll(Duration.ofMillis(1000));
-
+                ConsumerRecords<String, Long> consumerRecords = kafkaConsumer.poll(Duration.ofMillis(100));
+                if (consumerRecords.count() > 0) {
+                    logger.info("counts : {}", consumerRecords.count());
+                }
                 for (ConsumerRecord record : consumerRecords) {
                     logger.info("record key:{},  partition:{}, record offset:{} record value:{}",
                             record.key(), record.partition(), record.offset(), record.value());
+                }
+
+                try {
+                    Thread.sleep(500); // 2초간 스레드 sleep
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                 }
             }
         }catch(WakeupException e) {
