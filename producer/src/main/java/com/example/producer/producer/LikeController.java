@@ -13,13 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class LikeController {
 
-
     private final LikeEventProducer likeEventProducer;
 
     @GetMapping("/like")
-    public ResponseEntity<String> like(@RequestParam String broadcastId) {
+    public ResponseEntity<String> like(@RequestParam String userId, @RequestParam(defaultValue = "n") String stop) {
         // 사용자가 좋아요를 누른 경우 좋아요 이벤트를 Kafka 토픽에 전송
-        likeEventProducer.sendLikeEvent(broadcastId);
+        likeEventProducer.sendLikeEvent(userId);
 
         return ResponseEntity.ok("Liked!");
     }

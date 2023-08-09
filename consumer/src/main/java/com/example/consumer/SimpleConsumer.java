@@ -18,15 +18,16 @@ import java.util.Properties;
 public class SimpleConsumer {
 
     public static final Logger logger = LoggerFactory.getLogger(SimpleConsumer.class.getName());
-    private static final String LIKE_TOPIC = "like_events"; // 좋아요 이벤트를 보낼 토픽 이름
+    private static final String LIKE_TOPIC = "like-events-user"; // 좋아요 이벤트를 보낼 토픽 이름
     public static void main(String[] args) {
 
 
         Properties props = new Properties();
         props.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9091, 127.0.0.1:9092, 127.0.0.1:9093");
         props.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-        props.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, LongDeserializer.class.getName());
-        props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "like-group");
+        props.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+        props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "like-user-1");
+        props.setProperty(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, String.valueOf(3000));
 
         KafkaConsumer<String, Long> kafkaConsumer = new KafkaConsumer<>(props);
         kafkaConsumer.subscribe(List.of(LIKE_TOPIC));
@@ -40,20 +41,15 @@ public class SimpleConsumer {
                 mainThread.join();
             } catch(InterruptedException e) { e.printStackTrace();}
         }));
-
         try {
             while (true) {
                 ConsumerRecords<String, Long> consumerRecords = kafkaConsumer.poll(Duration.ofMillis(100));
                 if (consumerRecords.count() > 0) {
                     logger.info("counts : {}", consumerRecords.count());
                 }
-                for (ConsumerRecord record : consumerRecords) {
-                    logger.info("record key:{},  partition:{}, record offset:{} record value:{}",
-                            record.key(), record.partition(), record.offset(), record.value());
-                }
 
                 try {
-                    Thread.sleep(500); // 2초간 스레드 sleep
+                    Thread.sleep(3000); // 2초간 스레드 sleep
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }

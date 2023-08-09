@@ -5,3 +5,8 @@ spring:
     redis:
       host: 127.0.0.1
       port: 6379
+
+logging:
+  level:
+    org.springframework.kafka.core.KafkaProducer: DEBUG
+    org.springframework.kafka.listener.KafkaMessageListenerContainer: DEBUG
