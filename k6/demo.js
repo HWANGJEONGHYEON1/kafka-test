@@ -3,11 +3,11 @@ import { sleep, group } from 'k6';
 
 export let options = {
     stages: [
-        { duration: '5s', target: 10000 }, // 0~5초 동안 10,000명의 사용자로 요청 시뮬레이션
-        { duration: '5s', target: 10000 }, // 5~10초 동안 10,000명의 사용자로 요청 시뮬레이션
-        { duration: '5s', target: 10000 }, // 10~15초 동안 10,000명의 사용자로 요청 시뮬레이션
-        { duration: '5s', target: 10000 }, // 15~20초 동안 10,000명의 사용자로 요청 시뮬레이션
-        { duration: '5s', target: 10000 }, // 20~25초 동안 10,000명의 사용자로 요청 시뮬레이션
+        { duration: '5s', target: 100 }, // 0~5초 동안 10,000명의 사용자로 요청 시뮬레이션
+        { duration: '5s', target: 100 }, // 5~10초 동안 10,000명의 사용자로 요청 시뮬레이션
+        // { duration: '5s', target: 10000 }, // 10~15초 동안 10,000명의 사용자로 요청 시뮬레이션
+        // { duration: '5s', target: 10000 }, // 15~20초 동안 10,000명의 사용자로 요청 시뮬레이션
+        // { duration: '5s', target: 10000 }, // 20~25초 동안 10,000명의 사용자로 요청 시뮬레이션
     ],
     ext: {
         loadimpact: {
@@ -18,7 +18,7 @@ export let options = {
     }
 };
 
-const BASE_URL = "http://localhost:8080/like?userId=";
+const BASE_URL = "http://localhost/like?userId=";
 
 export default function () {
     group('User Flow', function () {
