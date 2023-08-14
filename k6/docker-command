@@ -9,4 +9,11 @@ docker exec -it k6_kafka1_1 kafka-topics --bootstrap-server localhost:19091 --cr
 docker exec -it k6_kafka1_1 kafka-topics --bootstrap-server localhost:19091 --create --topic like-events-user --partitions 3 --replication-factor 2
 
 토픽 상세
-docker exec -it k6_kafka1_1 kafka-topics --bootstrap-server localhost:9092 --describe --topic like_events
+docker exec -it k6_kafka1_1 kafka-topics --bootstrap-server localhost:19091 --describe --topic like_events
+
+
+쿠폰 프로젝트
+
+docker exec -it k6_kafka1_1 kafka-topics --bootstrap-server localhost:19091 --create --topic coupon_create
+
+docker exec -it k6_kafka1_1 kafka-console-consumer --topic coupon_create --bootstrap-server localhost:19091 --key-deserializer "org.apache.kafka.common.serialization.StringDeserializer" --value-deserializer "org.apache.kafka.common.serialization.LongDeserializer"
