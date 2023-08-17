@@ -26,7 +26,6 @@ class ApplyServiceTest {
     @DisplayName("한번만 응모")
     void apply() {
         applyService.apply(1L);
-
         assertThat(couponRepository.count()).isEqualTo(1);
     }
 
@@ -61,7 +60,6 @@ class ApplyServiceTest {
         // 모든 요청이 끝날때까지 기다림, 다른 스레드에서 끝날때까지 기다려줌
         CountDownLatch count = new CountDownLatch(threadCount);
         for (int i = 0; i < threadCount; i++) {
-            long userId = i;
             executors.submit(() -> {
                 try {
                     applyService.applyUserLimitedOneCoupon(100L);
@@ -80,10 +78,10 @@ class ApplyServiceTest {
     void apply_multiply_one_user_coupon_limit_3() throws InterruptedException {
         int threadCount = 1000;
         ExecutorService executors = Executors.newFixedThreadPool(32);
+
         // 모든 요청이 끝날때까지 기다림, 다른 스레드에서 끝날때까지 기다려줌
         CountDownLatch count = new CountDownLatch(threadCount);
         for (int i = 0; i < threadCount; i++) {
-            long userId = i;
             executors.submit(() -> {
                 try {
                     applyService.applyUserLimitedThreeCoupon(100L);
