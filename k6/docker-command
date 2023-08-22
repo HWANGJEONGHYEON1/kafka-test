@@ -17,3 +17,5 @@ docker exec -it k6_kafka1_1 kafka-topics --bootstrap-server localhost:19091 --de
 docker exec -it k6_kafka1_1 kafka-topics --bootstrap-server localhost:19091 --create --topic coupon_create
 
 docker exec -it k6_kafka1_1 kafka-console-consumer --topic coupon_create --bootstrap-server localhost:19091 --key-deserializer "org.apache.kafka.common.serialization.StringDeserializer" --value-deserializer "org.apache.kafka.common.serialization.LongDeserializer"
+
+docker exec -it k6_kafka1_1 kafka-console-consumer --topic test-topic --bootstrap-server localhost:19091
